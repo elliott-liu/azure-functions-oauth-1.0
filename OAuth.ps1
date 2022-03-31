@@ -53,7 +53,7 @@ $SignatureParams = @{
 	'oauth_timestamp'        = $OauthTimestamp;
 	'oauth_version'          = '1.0';
 }
-$SignatureQueryParams = @{}
+$SignatureQueryParams = @{};
 $SignatureParams.Keys | % { $SignatureQueryParams.Add($_, $SignatureParams.Item($_)) };
 $RequestQueryParams.Keys | % { $SignatureQueryParams.Add($_, [Uri]::EscapeDataString($RequestQueryParams.Item($_))) };
 $SignatureQueryParams = $SignatureQueryParams.GetEnumerator() | Sort-Object -Property Name;
@@ -73,7 +73,7 @@ $OauthSignature = [Uri]::EscapeDataString([Convert]::ToBase64String($hmacsha.Com
 
 ## Build the authorization headers using most of the signature headers elements.
 $AuthorizationParams = $SignatureParams;
-$AuthorizationParams.Add('oauth_signature', $OauthSignature)  ;
+$AuthorizationParams.Add('oauth_signature', $OauthSignature);
 $AuthorizationString = 'OAuth ';
 $AuthorizationParams.GetEnumerator() | ForEach-Object { $AuthorizationString += $_.Name + '="' + $_.Value + '", ' };
 $AuthorizationString = $AuthorizationString.TrimEnd(', ');
